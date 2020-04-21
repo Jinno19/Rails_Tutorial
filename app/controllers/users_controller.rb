@@ -8,8 +8,9 @@
       end
 
       def show
-        @user = User.find(params[:id])                                              # paramsで:idパラメータを受け取る(/users/1にアクセスしたら1を受け取る)
-        redirect_to root_url and return unless @user.activated?                     # activatedがfalseならルートURLヘリダイレクト
+        @user = User.find(params[:id])
+        redirect_to root_url and return unless @user.activated?                                              # paramsで:idパラメータを受け取る(/users/1にアクセスしたら1を受け取る)
+        @microposts=@user.microposts.paginate(page: params[:page])
       end
 
       def new
@@ -55,15 +56,6 @@
         end
 
         #beforeアクション
-
-        #ログイン済みユーザーかどうか確認
-        def logged_in_user
-          unless logged_in?
-            store_location
-            flash[:danger]="Plaese log in."
-            redirect_to login_url
-          end
-        end
 
         #正しいユーザーかどうか確認
         def correct_user
